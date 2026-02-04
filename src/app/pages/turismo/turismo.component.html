@@ -1,0 +1,43 @@
+<main class="page">
+  <header class="page-header">
+    <a class="back" href="/">← Volver</a>
+    <h1>Turismo</h1>
+    <p>Lugares para visitar y eventos locales.</p>
+  </header>
+
+  <section class="grid" *ngIf="(places$ | async)?.length; else placeholder">
+    <article class="card" *ngFor="let place of (places$ | async)">
+      <div class="carousel" *ngIf="place.imageUrls?.length; else placeholderImage">
+        <button class="carousel-btn prev" (click)="scrollCarousel(track, -1)" aria-label="Imagen anterior">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div class="carousel-track" #track>
+          <img *ngFor="let img of place.imageUrls" [src]="img" [alt]="place.name" loading="lazy" />
+        </div>
+        <button class="carousel-btn next" (click)="scrollCarousel(track, 1)" aria-label="Imagen siguiente">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <div class="carousel-dots" aria-hidden="true">
+          <span class="dot" *ngFor="let _ of place.imageUrls"></span>
+        </div>
+      </div>
+      <ng-template #placeholderImage>
+        <div class="media"></div>
+      </ng-template>
+      <div class="body">
+        <h3>{{ place.name }}</h3>
+        <div class="rich" [innerHTML]="place.description | richText"></div>
+        <a class="primary" [href]="place.mapsUrl" target="_blank" rel="noopener">
+          Como llegar
+        </a>
+      </div>
+    </article>
+  </section>
+
+  <ng-template #placeholder>
+    <section class="page-card">
+      <p>No hay lugares cargados aun.</p>
+    </section>
+  </ng-template>
+  <app-sticky-footer></app-sticky-footer>
+</main>

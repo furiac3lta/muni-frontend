@@ -1,0 +1,86 @@
+.page {
+  min-height: 100vh;
+  padding: 2rem 1.2rem 3rem;
+  background: radial-gradient(circle at top, var(--color-bg) 0%, var(--color-bg) 60%);
+  font-family: "Alegreya Sans", "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+.page-shell {
+  max-width: 920px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.page-header {
+  display: grid;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.18rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 2.1rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.page-card {
+  background: var(--color-surface);
+  border-radius: 22px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+}
+
+.reading {
+  border-left: 4px solid var(--color-primary);
+  padding-left: 1rem;
+  color: var(--color-text);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+@media (min-width: 720px) {
+  .page {
+    padding: 3rem 2rem 4rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.4rem;
+  }
+
+  .page-card {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .page-header {
+    text-align: center;
+  }
+
+  .back {
+    justify-content: center;
+  }
+}

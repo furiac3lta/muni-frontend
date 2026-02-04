@@ -1,0 +1,427 @@
+<main class="admin">
+  <div class="admin-overlay" *ngIf="navOpen" (click)="closeNav()"></div>
+  <aside class="admin-nav" [class.open]="navOpen">
+    <div class="admin-brand">
+      <div class="logo">PR</div>
+      <div>
+        <p>Panel admin</p>
+        <strong>Municipio</strong>
+      </div>
+      <button class="nav-toggle" (click)="toggleNav()">
+        <i class="fa-solid" [class.fa-xmark]="navOpen" [class.fa-bars]="!navOpen"></i>
+      </button>
+    </div>
+    <nav>
+      <button [class.active]="section === 'municipio'" (click)="setSection('municipio')">Municipio</button>
+      <button [class.active]="section === 'noticias'" (click)="setSection('noticias')">Noticias</button>
+      <button [class.active]="section === 'alertas'" (click)="setSection('alertas')">Alertas</button>
+      <button [class.active]="section === 'telefonos'" (click)="setSection('telefonos')">Telefonos</button>
+      <button [class.active]="section === 'turismo'" (click)="setSection('turismo')">Turismo</button>
+      <button [class.active]="section === 'comercios'" (click)="setSection('comercios')">Comercios</button>
+      <button [class.active]="section === 'servicios'" (click)="setSection('servicios')">Servicios</button>
+      <button [class.active]="section === 'admin'" (click)="setSection('admin')">Usuarios admin</button>
+    </nav>
+    <button class="logout" (click)="logout()">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      Cerrar sesion
+    </button>
+  </aside>
+
+  <section class="admin-content">
+    <header>
+      <div class="header-row">
+        <button class="admin-title-button" (click)="toggleNav()" aria-label="Abrir menu">
+          <h1>Administracion</h1>
+        </button>
+      </div>
+      <p>Gestiona la informacion publica de la app.</p>
+      <div class="session-info">
+        Sesion activa: <strong>{{ loggedUsername }}</strong> · {{ loggedRole }}
+      </div>
+    </header>
+
+    <section class="panel" *ngIf="section === 'municipio'">
+      <h2>Informacion municipal</h2>
+      <div class="form-grid">
+        <label>
+          Historia
+          <textarea [(ngModel)]="municipalInfo.history"></textarea>
+          <small class="hint">Usa # para titulo, ## subtitulo, - lista, **negrita**, *cursiva*</small>
+        </label>
+        <label>
+          Direccion
+          <input [(ngModel)]="municipalInfo.address" />
+        </label>
+        <label>
+          Horario
+          <input [(ngModel)]="municipalInfo.workingHours" />
+        </label>
+        <label>
+          URL mapa
+          <input [(ngModel)]="municipalInfo.mapUrl" />
+        </label>
+      </div>
+      <button class="primary" (click)="saveMunicipality()">
+        <i class="fa-solid fa-floppy-disk"></i>
+        Guardar cambios
+      </button>
+    </section>
+
+    <section class="panel" *ngIf="section === 'noticias'">
+      <h2>Noticias</h2>
+      <div class="form-grid">
+        <label>
+          Titulo
+          <input [(ngModel)]="newsForm.title" />
+        </label>
+        <label>
+          Contenido
+          <textarea [(ngModel)]="newsForm.content"></textarea>
+          <small class="hint">Usa # para titulo, ## subtitulo, - lista, **negrita**, *cursiva*</small>
+        </label>
+        <label>
+          Subir imagen
+          <input type="file" (change)="handleNewsImageUpload($event)" />
+          <small>{{ uploadMessage }}</small>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="newsForm.active" />
+          Activa
+        </label>
+      </div>
+      <div class="actions">
+        <button class="primary" (click)="saveNews()">
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ selectedNews ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button class="ghost" (click)="resetNews()">
+          <i class="fa-solid fa-rotate-left"></i>
+          Limpiar
+        </button>
+      </div>
+      <ul class="list">
+        <li *ngFor="let item of news">
+          <div>
+            <strong>{{ item.title }}</strong>
+            <span>{{ item.createdAt }}</span>
+          </div>
+          <div class="row-actions">
+            <button class="ghost" (click)="editNews(item)">
+              <i class="fa-solid fa-pen"></i>
+              Editar
+            </button>
+            <button class="danger" (click)="deleteNews(item)">
+              <i class="fa-solid fa-trash"></i>
+              Eliminar
+            </button>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel" *ngIf="section === 'alertas'">
+      <h2>Alertas</h2>
+      <div class="form-grid">
+        <label>
+          Titulo
+          <input [(ngModel)]="alertForm.title" />
+        </label>
+        <label>
+          Mensaje
+          <textarea [(ngModel)]="alertForm.message"></textarea>
+          <small class="hint">Usa # para titulo, ## subtitulo, - lista, **negrita**, *cursiva*</small>
+        </label>
+        <label>
+          Tipo
+          <select [(ngModel)]="alertForm.type">
+            <option *ngFor="let type of alertTypes" [value]="type">{{ type }}</option>
+          </select>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="alertForm.active" />
+          Activa
+        </label>
+      </div>
+      <div class="actions">
+        <button class="primary" (click)="saveAlert()">
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ selectedAlert ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button class="ghost" (click)="resetAlerts()">
+          <i class="fa-solid fa-rotate-left"></i>
+          Limpiar
+        </button>
+      </div>
+      <ul class="list">
+        <li *ngFor="let item of alerts">
+          <div>
+            <strong>{{ item.title }}</strong>
+            <span>{{ item.type }}</span>
+          </div>
+          <button class="ghost" (click)="editAlert(item)">
+            <i class="fa-solid fa-pen"></i>
+            Editar
+          </button>
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel" *ngIf="section === 'telefonos'">
+      <h2>Telefonos importantes</h2>
+      <div class="form-grid">
+        <label>
+          Nombre
+          <input [(ngModel)]="contactForm.name" />
+        </label>
+        <label>
+          Telefono
+          <input [(ngModel)]="contactForm.phone" />
+        </label>
+        <label>
+          Icono (Font Awesome)
+          <input [(ngModel)]="contactForm.icon" />
+          <small class="hint">Ej: fa-solid fa-fire, fa-solid fa-phone</small>
+        </label>
+        <label>
+          Prioridad
+          <input type="number" [(ngModel)]="contactForm.priority" />
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="contactForm.active" />
+          Activo
+        </label>
+      </div>
+      <div class="actions">
+        <button class="primary" (click)="saveContact()">
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ selectedContact ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button class="ghost" (click)="resetContacts()">
+          <i class="fa-solid fa-rotate-left"></i>
+          Limpiar
+        </button>
+      </div>
+      <ul class="list">
+        <li *ngFor="let item of contacts">
+          <div>
+            <strong>{{ item.name }}</strong>
+            <span>{{ item.phone }}</span>
+          </div>
+          <button class="ghost" (click)="editContact(item)">
+            <i class="fa-solid fa-pen"></i>
+            Editar
+          </button>
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel" *ngIf="section === 'turismo'">
+      <h2>Turismo</h2>
+      <div class="form-grid">
+        <label>
+          Nombre
+          <input [(ngModel)]="tourismForm.name" />
+        </label>
+        <label>
+          Descripcion
+          <textarea [(ngModel)]="tourismForm.description"></textarea>
+          <small class="hint">Usa # para titulo, ## subtitulo, - lista, **negrita**, *cursiva*</small>
+        </label>
+        <label>
+          URL imagen principal
+          <input [(ngModel)]="tourismForm.imageUrl" />
+        </label>
+        <label>
+          Subir imagenes
+          <input type="file" multiple (change)="handleTourismImagesUpload($event)" />
+          <small>{{ uploadMessage }}</small>
+        </label>
+        <div class="image-list" *ngIf="tourismForm.imageUrls?.length">
+          <span>Imagenes cargadas:</span>
+          <div class="chips">
+            <span class="chip" *ngFor="let url of tourismForm.imageUrls">{{ url }}</span>
+          </div>
+        </div>
+        <label>
+          URL mapa
+          <input [(ngModel)]="tourismForm.mapsUrl" />
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="tourismForm.active" />
+          Activo
+        </label>
+      </div>
+      <div class="actions">
+        <button class="primary" (click)="saveTourism()">
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ selectedTourism ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button class="ghost" (click)="resetTourism()">
+          <i class="fa-solid fa-rotate-left"></i>
+          Limpiar
+        </button>
+      </div>
+      <ul class="list">
+        <li *ngFor="let item of tourism">
+          <div>
+            <strong>{{ item.name }}</strong>
+            <span>{{ item.mapsUrl }}</span>
+          </div>
+          <button class="ghost" (click)="editTourism(item)">
+            <i class="fa-solid fa-pen"></i>
+            Editar
+          </button>
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel" *ngIf="section === 'comercios'">
+      <h2>Comercios</h2>
+      <div class="form-grid">
+        <label>
+          Nombre
+          <input [(ngModel)]="businessForm.name" />
+        </label>
+        <label>
+          Rubro
+          <input [(ngModel)]="businessForm.category" />
+        </label>
+        <label>
+          Telefono
+          <input [(ngModel)]="businessForm.phone" />
+        </label>
+        <label>
+          WhatsApp
+          <input [(ngModel)]="businessForm.whatsapp" />
+        </label>
+        <label>
+          Direccion
+          <input [(ngModel)]="businessForm.address" />
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="businessForm.highlighted" />
+          Destacado
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="businessForm.active" />
+          Activo
+        </label>
+      </div>
+      <div class="actions">
+        <button class="primary" (click)="saveBusiness()">
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ selectedBusiness ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button class="ghost" (click)="resetBusiness()">
+          <i class="fa-solid fa-rotate-left"></i>
+          Limpiar
+        </button>
+      </div>
+      <ul class="list">
+        <li *ngFor="let item of businesses">
+          <div>
+            <strong>{{ item.name }}</strong>
+            <span>{{ item.category }}</span>
+          </div>
+          <button class="ghost" (click)="editBusiness(item)">
+            <i class="fa-solid fa-pen"></i>
+            Editar
+          </button>
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel" *ngIf="section === 'servicios'">
+      <h2>Servicios utiles</h2>
+      <div class="form-grid">
+        <label>
+          Nombre
+          <input [(ngModel)]="serviceForm.name" />
+        </label>
+        <label>
+          Descripcion
+          <textarea [(ngModel)]="serviceForm.description"></textarea>
+          <small class="hint">Usa # para titulo, ## subtitulo, - lista, **negrita**, *cursiva*</small>
+        </label>
+        <label>
+          Horario
+          <input [(ngModel)]="serviceForm.schedule" />
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="serviceForm.active" />
+          Activo
+        </label>
+      </div>
+      <div class="actions">
+        <button class="primary" (click)="saveService()">
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ selectedService ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button class="ghost" (click)="resetService()">
+          <i class="fa-solid fa-rotate-left"></i>
+          Limpiar
+        </button>
+      </div>
+      <ul class="list">
+        <li *ngFor="let item of services">
+          <div>
+            <strong>{{ item.name }}</strong>
+            <span>{{ item.schedule }}</span>
+          </div>
+          <button class="ghost" (click)="editService(item)">
+            <i class="fa-solid fa-pen"></i>
+            Editar
+          </button>
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel" *ngIf="section === 'admin'">
+      <h2>Usuarios admin</h2>
+      <div class="form-grid">
+        <label>
+          Usuario
+          <input [(ngModel)]="adminUserForm.username" />
+        </label>
+        <label>
+          Password
+          <input [(ngModel)]="adminUserForm.password" type="password" />
+        </label>
+        <label>
+          Rol
+          <select [(ngModel)]="adminUserForm.role">
+            <option value="ADMIN">ADMIN</option>
+            <option value="EDITOR">EDITOR</option>
+          </select>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="adminUserForm.active" />
+          Activo
+        </label>
+      </div>
+      <div class="actions">
+        <button class="primary" (click)="saveAdminUser()">
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ selectedAdminUser ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button class="ghost" (click)="resetAdminUsers()">
+          <i class="fa-solid fa-rotate-left"></i>
+          Limpiar
+        </button>
+      </div>
+      <ul class="list">
+        <li *ngFor="let item of adminUsers">
+          <div>
+            <strong>{{ item.username }}</strong>
+            <span>{{ item.role }}</span>
+          </div>
+          <button class="ghost" (click)="editAdminUser(item)">
+            <i class="fa-solid fa-pen"></i>
+            Editar
+          </button>
+        </li>
+      </ul>
+    </section>
+    <app-sticky-footer></app-sticky-footer>
+  </section>
+</main>

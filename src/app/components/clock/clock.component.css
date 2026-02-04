@@ -1,0 +1,12 @@
+.clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  padding: 0.15rem 0;
+}
+
+.clock i {
+  color: var(--color-primary);
+}

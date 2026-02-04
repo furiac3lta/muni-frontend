@@ -1,0 +1,22 @@
+<main class="page">
+  <header class="page-header">
+    <a class="back" href="/">← Volver</a>
+    <h1>Servicios utiles</h1>
+    <p>Informacion practica para el vecino.</p>
+  </header>
+
+  <section class="grid" *ngIf="(services$ | async)?.length; else placeholder">
+    <article class="card" *ngFor="let service of (services$ | async)">
+      <h3>{{ service.name }}</h3>
+      <div class="rich" [innerHTML]="service.description | richText"></div>
+      <span>{{ service.schedule }}</span>
+    </article>
+  </section>
+
+  <ng-template #placeholder>
+    <section class="page-card">
+      <p>No hay servicios cargados aun.</p>
+    </section>
+  </ng-template>
+  <app-sticky-footer></app-sticky-footer>
+</main>

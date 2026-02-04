@@ -1,0 +1,23 @@
+<nav class="global-nav" aria-label="Navegacion principal" [class.open]="navOpen">
+  <div class="nav-overlay" *ngIf="navOpen" (click)="closeNav()"></div>
+  <button class="nav-toggle" (click)="toggleNav()" aria-label="Abrir menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+  <a class="brand" routerLink="/">PR</a>
+  <div class="nav-links" (click)="closeNav()">
+    <a routerLink="/">Inicio</a>
+    <a routerLink="/telefonos">Telefonos</a>
+    <a routerLink="/turismo">Turismo</a>
+    <a routerLink="/comercios">Comercios</a>
+    <a routerLink="/servicios">Servicios</a>
+    <a routerLink="/alertas">Alertas</a>
+    <a routerLink="/admin/login">Admin</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDark ? 'Activar modo claro' : 'Activar modo oscuro'">
+      <i class="fa-solid" [class.fa-sun]="isDark" [class.fa-moon]="!isDark"></i>
+      <span>{{ isDark ? 'Claro' : 'Oscuro' }}</span>
+    </button>
+    <app-clock></app-clock>
+  </div>
+</nav>

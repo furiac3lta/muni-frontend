@@ -1,0 +1,90 @@
+.page {
+  min-height: 100vh;
+  padding: 2rem 1.5rem 3rem;
+  background: var(--color-bg);
+  font-family: "Alegreya Sans", "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+.page-header {
+  text-align: left;
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.9rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: 18px;
+  padding: 1.2rem;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+  display: grid;
+  gap: 0.5rem;
+}
+
+.card p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.rich h1,
+.rich h2,
+.rich h3 {
+  margin: 0.5rem 0 0.3rem;
+}
+
+.rich p {
+  margin: 0 0 0.5rem;
+  color: var(--color-muted);
+}
+
+.rich ul {
+  margin: 0 0 0.5rem 1rem;
+  padding: 0;
+  color: var(--color-muted);
+}
+
+.card span {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.page-card {
+  background: var(--color-surface);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+@media (max-width: 720px) {
+  .page-header {
+    text-align: center;
+  }
+
+  .back {
+    justify-content: center;
+  }
+}

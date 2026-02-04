@@ -1,0 +1,67 @@
+<main class="page">
+  <header class="page-header">
+    <a class="back" href="/">← Volver</a>
+    <h1>Alertas importantes</h1>
+    <p>Comunicaciones urgentes y avisos activos.</p>
+  </header>
+
+  <section class="page-card" *ngIf="weather$ | async as weather; else climaPlaceholder">
+    <h2>Clima</h2>
+    <div class="item weather-block">
+      <div class="weather-main">
+        <i
+          class="weather-icon"
+          [ngClass]="[weatherService.mapWeatherIcon(weather.current_weather.weathercode), weatherService.mapWeatherColor(weather.current_weather.weathercode)]"
+        ></i>
+        <div>
+          <h3>{{ weather.current_weather.temperature }}°C</h3>
+          <p>{{ weatherService.mapWeatherCode(weather.current_weather.weathercode) }}</p>
+        </div>
+      </div>
+      <div class="weather-meta">
+        <span>Max {{ weatherService.todaySummary(weather).max }}°</span>
+        <span>Min {{ weatherService.todaySummary(weather).min }}°</span>
+        <span>Lluvia {{ weatherService.todaySummary(weather).rain }} mm</span>
+      </div>
+    </div>
+    <div class="forecast-grid">
+      <article class="forecast-day" *ngFor="let day of weatherService.dailyForecast(weather)">
+        <i class="forecast-icon" [ngClass]="[day.icon, day.color]"></i>
+        <span class="forecast-label">{{ day.label }}</span>
+        <div class="forecast-temps">
+          <strong>{{ day.max }}°</strong>
+          <span>{{ day.min }}°</span>
+        </div>
+        <span class="forecast-rain">Lluvia {{ day.rain }} mm</span>
+      </article>
+    </div>
+    <article class="item" *ngFor="let alert of (climaAlerts$ | async)">
+      <h3>{{ alert.title }}</h3>
+      <div class="rich" [innerHTML]="alert.message | richText"></div>
+    </article>
+  </section>
+
+  <ng-template #climaPlaceholder>
+    <section class="page-card">
+      <h2>Clima</h2>
+      <p>No se pudo obtener el clima.</p>
+    </section>
+  </ng-template>
+
+  <section class="page-card" *ngIf="(otherAlerts$ | async)?.length; else placeholder">
+    <h2>Otras alertas</h2>
+    <article class="item" *ngFor="let alert of (otherAlerts$ | async)">
+      <h3>{{ alert.title }}</h3>
+      <div class="rich" [innerHTML]="alert.message | richText"></div>
+      <span>{{ alert.type }}</span>
+    </article>
+  </section>
+
+  <ng-template #placeholder>
+    <section class="page-card">
+      <p>No hay alertas activas.</p>
+      <p class="muted">Las alertas se publican desde el panel admin cuando hay avisos urgentes o cortes.</p>
+    </section>
+  </ng-template>
+  <app-sticky-footer></app-sticky-footer>
+</main>

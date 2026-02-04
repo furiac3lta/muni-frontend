@@ -1,0 +1,26 @@
+<main class="login">
+  <section class="login-card">
+    <div>
+      <p class="eyebrow">Panel administrativo</p>
+      <h1>Ingresar</h1>
+      <p class="hint">Solo para personal autorizado.</p>
+    </div>
+
+    <form (ngSubmit)="submit()" class="login-form">
+      <label>
+        Usuario
+        <input type="text" name="username" [(ngModel)]="username" required />
+      </label>
+      <label>
+        Contrasena
+        <input type="password" name="password" [(ngModel)]="password" required />
+      </label>
+
+      <p class="error" *ngIf="error">{{ error }}</p>
+      <button type="submit" [disabled]="loading">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        {{ loading ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+    </form>
+  </section>
+</main>

@@ -1,0 +1,30 @@
+<main class="page">
+  <header class="page-header">
+    <a class="back" href="/">← Volver</a>
+    <h1>Comercios y negocios</h1>
+    <p>Listado informativo por rubro.</p>
+  </header>
+
+  <section class="grid" *ngIf="(grouped$ | async)?.length; else placeholder">
+    <article class="card" *ngFor="let group of (grouped$ | async)">
+      <h3>{{ group.category }}</h3>
+      <div class="item" *ngFor="let business of group.list">
+        <div>
+          <strong>{{ business.name }}</strong>
+          <span>{{ business.address }}</span>
+        </div>
+        <div class="actions">
+          <a [href]="'tel:' + business.phone">Llamar</a>
+          <a [href]="'https://wa.me/' + business.whatsapp">WhatsApp</a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <ng-template #placeholder>
+    <section class="page-card">
+      <p>No hay comercios cargados aun.</p>
+    </section>
+  </ng-template>
+  <app-sticky-footer></app-sticky-footer>
+</main>

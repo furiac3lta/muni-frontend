@@ -1,0 +1,18 @@
+<main class="page">
+  <header class="page-header">
+    <a class="back" href="/">← Volver</a>
+    <h1>Horarios municipales</h1>
+    <p>Atencion y horarios de dependencias.</p>
+  </header>
+
+  <section class="page-card" *ngIf="info$ | async as info; else placeholder">
+    <p><strong>Horario general:</strong> {{ info.workingHours }}</p>
+  </section>
+
+  <ng-template #placeholder>
+    <section class="page-card">
+      <p>Los horarios oficiales se cargaran en breve.</p>
+    </section>
+  </ng-template>
+  <app-sticky-footer></app-sticky-footer>
+</main>

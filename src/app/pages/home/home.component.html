@@ -1,0 +1,393 @@
+<main class="app">
+  <header class="hero" id="inicio">
+    <div class="hero-top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">PR</div>
+        <div>
+          <p class="eyebrow">Municipio de Puerto Rico, Misiones</p>
+          <h1>Tu municipio en el bolsillo</h1>
+          <p class="hero-subtitle">
+            Informacion clara, rapida y accesible para vecinas y vecinos.
+          </p>
+        </div>
+      </div>
+      <div class="hero-weather">
+        <div class="section-header">
+          <!-- <h2>Clima en Puerto Rico</h2>
+          <p>Actualizacion en tiempo real.</p> -->
+        </div>
+        <article class="card card-link" [routerLink]="'/alertas'" *ngIf="weather$ | async as weather; else climaPlaceholderTop">
+          <div class="weather-head">
+          <i
+            class="weather-icon"
+            [ngClass]="[weatherService.mapWeatherIcon(weather.current_weather.weathercode), weatherService.mapWeatherColor(weather.current_weather.weathercode)]"
+          ></i>
+            <div>
+              <strong>{{ weather.current_weather.temperature }}°C  </strong>
+              <span>{{ weatherService.mapWeatherCode(weather.current_weather.weathercode) }}</span>
+            </div>
+          </div>
+          <div class="weather-summary">
+            <span>Max {{ weatherService.todaySummary(weather).max }}°</span>
+            <span>Min {{ weatherService.todaySummary(weather).min }}°</span>
+            <span>Lluvia {{ weatherService.todaySummary(weather).rain }} mm</span>
+          </div>
+        </article>
+        <ng-template #climaPlaceholderTop>
+          <article class="card card-link" [routerLink]="'/alertas'">
+          <h3>Clima en Puerto Rico</h3>
+            <p>No se pudo obtener el clima.</p>
+          </article>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <a class="action primary" href="tel:103" aria-label="Llamar emergencias">
+        Emergencias
+        <span>103</span>
+      </a>
+      <a class="action" [routerLink]="'/telefonos'">
+        Telefonos clave
+        <span>Un toque = llamada</span>
+      </a>
+      <a class="action" [routerLink]="'/alertas'">
+        Alertas importantes
+        <span>Servicios y clima</span>
+      </a>
+    </div>
+
+    <nav class="section-nav" aria-label="Navegacion principal">
+      <a href="#municipio">Municipio</a>
+      <a [routerLink]="'/telefonos'">Telefonos</a>
+      <a [routerLink]="'/turismo'">Turismo</a>
+      <a [routerLink]="'/comercios'">Comercios</a>
+      <a [routerLink]="'/servicios'">Servicios</a>
+      <a href="#notificaciones">Avisos</a>
+      <a class="admin-link" [routerLink]="'/admin/login'">Admin</a>
+    </nav>
+  </header>
+
+  <section class="section" id="municipio">
+    <div class="section-header">
+      <h2>Informacion del Municipio</h2>
+      <p>Datos ordenados y faciles de encontrar.</p>
+    </div>
+
+    <div class="card-grid" *ngIf="municipalInfo$ | async as info; else municipalFallback">
+      <article class="card card-link card-accent-1" [routerLink]="'/municipio/historia'">
+        <div class="card-header">
+          <h3>Historia de Puerto Rico</h3>
+        </div>
+        <div class="card-body">
+          <p class="excerpt">{{ info.history | plainText }}</p>
+        </div>
+        <div class="card-footer">
+          <button class="ghost">Leer historia completa</button>
+        </div>
+      </article>
+
+      <article class="card map-card card-link card-accent-2" [routerLink]="'/municipio/ubicacion'">
+        <div class="card-header">
+          <h3>Ubicacion</h3>
+        </div>
+        <div class="card-body">
+          <p class="excerpt">{{ info.address }}</p>
+        </div>
+        <div class="card-footer">
+          <span class="ghost">Ver en Google Maps</span>
+        </div>
+      </article>
+
+      <article class="card card-link card-accent-3" [routerLink]="'/municipio/horarios'">
+        <div class="card-header">
+          <h3>Horarios municipales</h3>
+        </div>
+        <div class="card-body">
+          <ul class="info-list">
+            <li><strong>Atencion:</strong> {{ info.workingHours }}</li>
+          </ul>
+        </div>
+        <div class="card-footer"></div>
+      </article>
+    </div>
+    <ng-template #municipalFallback>
+      <div class="card-grid">
+        <article class="card card-link card-accent-1" [routerLink]="'/municipio/historia'">
+          <div class="card-header">
+            <h3>Historia de Puerto Rico</h3>
+          </div>
+          <div class="card-body">
+            <p>Actualizando informacion municipal.</p>
+          </div>
+          <div class="card-footer">
+            <button class="ghost">Leer historia completa</button>
+          </div>
+        </article>
+        <article class="card map-card card-link card-accent-2" [routerLink]="'/municipio/ubicacion'">
+          <div class="card-header">
+            <h3>Ubicacion</h3>
+          </div>
+          <div class="card-body">
+            <p>Acceso rapido para llegar al edificio municipal.</p>
+          </div>
+          <div class="card-footer">
+            <span class="ghost">Ver en Google Maps</span>
+          </div>
+        </article>
+        <article class="card card-link card-accent-3" [routerLink]="'/municipio/horarios'">
+          <div class="card-header">
+            <h3>Horarios municipales</h3>
+          </div>
+          <div class="card-body">
+            <ul class="info-list">
+              <li><strong>Atencion:</strong> Lun a Vie · 7:00 a 13:00</li>
+            </ul>
+          </div>
+          <div class="card-footer"></div>
+        </article>
+      </div>
+    </ng-template>
+
+    <div class="card-grid">
+      <article class="card card-link card-accent-2" [routerLink]="'/noticias'" *ngIf="(news$ | async)?.length; else newsPlaceholder">
+        <div class="card-header">
+          <h3>Noticias y comunicados</h3>
+        </div>
+        <div class="card-body">
+          <ul class="news-list">
+            <li *ngFor="let item of (news$ | async) | slice:0:2">
+              <span>Noticia</span>
+              <span class="excerpt inline">{{ item.title }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <button class="ghost">Ver noticias</button>
+        </div>
+      </article>
+      <ng-template #newsPlaceholder>
+        <article class="card card-link card-accent-2" [routerLink]="'/noticias'">
+          <div class="card-header">
+            <h3>Noticias y comunicados</h3>
+          </div>
+          <div class="card-body">
+            <p>No hay noticias publicadas por el momento.</p>
+          </div>
+          <div class="card-footer"></div>
+        </article>
+      </ng-template>
+
+      <article class="card card-link card-accent-3" id="alertas" [routerLink]="'/alertas'" *ngIf="(alerts$ | async)?.length; else alertsPlaceholder">
+        <div class="card-header">
+          <h3>Alertas importantes</h3>
+        </div>
+        <div class="card-body">
+          <div class="alert-stack">
+            <div
+              class="alert"
+              *ngFor="let alert of (alerts$ | async) | slice:0:2"
+              [class.urgent]="alert.type === 'AVISO'"
+            >
+              <strong>{{ alert.title }}</strong>
+              <p class="excerpt">{{ alert.message | plainText }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="ghost">Ver alertas</button>
+        </div>
+      </article>
+      <ng-template #alertsPlaceholder>
+        <article class="card card-link card-accent-3" id="alertas" [routerLink]="'/alertas'">
+          <div class="card-header">
+            <h3>Alertas importantes</h3>
+          </div>
+          <div class="card-body">
+            <p>No hay alertas activas.</p>
+          </div>
+          <div class="card-footer"></div>
+        </article>
+      </ng-template>
+
+      <article class="card card-link card-accent-1 install-card" [routerLink]="'/instalar'">
+        <div class="card-header">
+          <h3>Instalar en el celular</h3>
+        </div>
+        <div class="card-body">
+          <p>
+            Abri el menu del navegador y toca "Agregar a la pantalla de inicio".
+            Funciona sin internet.
+          </p>
+          <div class="install-badges">
+            <span>Sin Play Store</span>
+            <span>Sin App Store</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="ghost">Ver guia</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+
+  <section class="section" id="telefonos">
+    <div class="section-header">
+      <h2>Telefonos importantes</h2>
+      <p>Un toque para llamar. Tarjetas grandes y claras.</p>
+    </div>
+
+    <div class="phone-grid" *ngIf="(contacts$ | async)?.length; else contactsPlaceholder">
+      <article class="card phone-card" *ngFor="let contact of (contacts$ | async)">
+        <div class="phone-title">
+          <i class="icon" [class]="contact.icon || 'fa-solid fa-phone'"></i>
+          <h3>{{ contact.name }}</h3>
+        </div>
+        <p class="phone-number">{{ contact.phone }}</p>
+        <a class="call" [href]="'tel:' + contact.phone">Tocar y llamar</a>
+      </article>
+    </div>
+    <ng-template #contactsPlaceholder>
+      <div class="card">
+        <div class="card-header">
+          <h3>Telefonos importantes</h3>
+        </div>
+        <div class="card-body">
+          <p>No hay contactos cargados aun.</p>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </ng-template>
+  </section>
+
+  <section class="section" id="turismo">
+    <div class="section-header">
+      <h2>Turismo</h2>
+      <p>Descubri lugares, eventos y espacios verdes.</p>
+    </div>
+
+    <div class="card-grid tourism-grid" *ngIf="(tourism$ | async)?.length; else tourismPlaceholder">
+      <article class="card media-card" *ngFor="let place of (tourism$ | async)">
+        <div
+          class="media"
+          role="img"
+          [attr.aria-label]="place.name"
+          [style.background-image]="place.imageUrls?.[0] ? 'url(' + place.imageUrls?.[0] + ')' : place.imageUrl ? 'url(' + place.imageUrl + ')' : null"
+        ></div>
+        <div class="card-header">
+          <h3>{{ place.name }}</h3>
+        </div>
+        <div class="card-body">
+          <p class="excerpt">{{ place.description | plainText }}</p>
+        </div>
+        <div class="card-footer">
+          <a class="ghost" [routerLink]="'/turismo'">Ver turismo</a>
+        </div>
+      </article>
+    </div>
+    <ng-template #tourismPlaceholder>
+      <div class="card">
+        <div class="card-header">
+          <h3>Turismo</h3>
+        </div>
+        <div class="card-body">
+          <p>No hay lugares cargados aun.</p>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </ng-template>
+  </section>
+
+  <section class="section" id="comercios">
+    <div class="section-header">
+      <h2>Comercios y negocios locales</h2>
+      <p>Listado informativo, pensado para destacar futuro contenido.</p>
+    </div>
+
+    <div class="card-grid commerce-grid" *ngIf="(businessesByCategory$ | async)?.length; else businessPlaceholder">
+      <article class="card commerce-card" *ngFor="let group of (businessesByCategory$ | async)">
+        <div class="card-header">
+          <h3>{{ group.category }}</h3>
+        </div>
+        <div class="card-body">
+          <div class="commerce-item" *ngFor="let business of group.list">
+            <div>
+              <strong>{{ business.name }}</strong>
+              <span>{{ business.address }}</span>
+            </div>
+            <div class="commerce-actions">
+              <a [routerLink]="'/comercios'">Ver comercios</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer"></div>
+      </article>
+    </div>
+    <ng-template #businessPlaceholder>
+      <div class="card">
+        <div class="card-header">
+          <h3>Comercios y negocios locales</h3>
+        </div>
+        <div class="card-body">
+          <p>No hay comercios cargados aun.</p>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </ng-template>
+  </section>
+
+  <section class="section" id="servicios">
+    <div class="section-header">
+      <h2>Servicios utiles</h2>
+      <p>Informacion practica. Sin formularios complejos.</p>
+    </div>
+
+    <div class="card-grid" *ngIf="(services$ | async)?.length; else servicesPlaceholder">
+      <article class="card" *ngFor="let service of (services$ | async)">
+        <div class="card-header">
+          <h3>{{ service.name }}</h3>
+        </div>
+        <div class="card-body">
+          <p class="excerpt">{{ service.description | plainText }}</p>
+        </div>
+        <div class="card-footer">
+          <button class="ghost" [routerLink]="'/servicios'">{{ service.schedule || 'Ver detalles' }}</button>
+        </div>
+      </article>
+    </div>
+    <ng-template #servicesPlaceholder>
+      <div class="card">
+        <div class="card-header">
+          <h3>Servicios utiles</h3>
+        </div>
+        <div class="card-body">
+          <p>No hay servicios cargados aun.</p>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </ng-template>
+  </section>
+
+  <section class="section" id="notificaciones">
+    <div class="section-header">
+      <h2>Notificaciones</h2>
+      <p>Arquitectura preparada para avisos urgentes y eventos.</p>
+    </div>
+
+    <div class="card notice-card">
+      <div class="card-header">
+        <h3>Proximamente</h3>
+      </div>
+      <div class="card-body">
+        <p>
+          Esta seccion permitira publicar alertas, emergencias y recordatorios
+          importantes directamente en el celular.
+        </p>
+      </div>
+      <div class="card-footer"></div>
+    </div>
+  </section>
+
+  <app-sticky-footer></app-sticky-footer>
+</main>

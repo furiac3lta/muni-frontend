@@ -1,0 +1,143 @@
+.global-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.nav-overlay {
+  display: none;
+}
+
+html[data-theme="dark"] .global-nav {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.brand {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: var(--primary-contrast);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  letter-spacing: 0.05rem;
+  text-decoration: none;
+}
+
+.nav-toggle {
+  display: none;
+  background: transparent;
+  color: var(--primary);
+  border-radius: 10px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-border);
+}
+
+.nav-links {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+  justify-items: center;
+  z-index: 45;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 999px;
+}
+
+.nav-links a:hover {
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.nav-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 0.65rem;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+}
+
+html[data-theme="dark"] .theme-toggle {
+  background: var(--surface-2);
+}
+
+@media (max-width: 900px) {
+  .global-nav {
+    grid-template-columns: auto auto 1fr;
+  }
+
+  .nav-links {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .global-nav {
+    grid-template-columns: auto auto 1fr;
+    grid-auto-rows: auto;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav-links {
+    display: none;
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
+    padding-top: 0.5rem;
+    z-index: 45;
+  }
+
+  .global-nav.open .nav-links {
+    display: grid;
+  }
+
+  .nav-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.35);
+    z-index: 40;
+  }
+
+  .nav-links a {
+    justify-self: start;
+  }
+
+  .nav-right {
+    justify-content: flex-end;
+  }
+
+  .theme-toggle span {
+    display: none;
+  }
+}

@@ -1,0 +1,27 @@
+<main class="page">
+  <header class="page-header">
+    <a class="back" href="/">← Volver</a>
+    <h1>Telefonos importantes</h1>
+    <p>Un toque para llamar.</p>
+  </header>
+
+  <section class="page-card" *ngIf="(contacts$ | async)?.length; else placeholder">
+    <article class="item" *ngFor="let contact of (contacts$ | async)">
+      <div class="row">
+        <i class="icon" [class]="contact.icon || 'fa-solid fa-phone'"></i>
+        <div>
+          <h3>{{ contact.name }}</h3>
+          <p>{{ contact.phone }}</p>
+        </div>
+      </div>
+      <a class="primary" [href]="'tel:' + contact.phone">Llamar</a>
+    </article>
+  </section>
+
+  <ng-template #placeholder>
+    <section class="page-card">
+      <p>No hay contactos cargados aun.</p>
+    </section>
+  </ng-template>
+  <app-sticky-footer></app-sticky-footer>
+</main>

@@ -1,0 +1,23 @@
+<main class="page">
+  <div class="page-shell">
+    <header class="page-header">
+      <a class="back" href="/">← Volver</a>
+      <span class="kicker">Informacion municipal</span>
+      <h1>Historia de Puerto Rico</h1>
+      <p>Identidad, tradiciones y crecimiento de la ciudad.</p>
+    </header>
+
+    <section class="page-card" *ngIf="info$ | async as info; else placeholder">
+      <div class="reading" [innerHTML]="info.history | richText"></div>
+    </section>
+
+    <ng-template #placeholder>
+      <section class="page-card">
+        <div class="reading">
+          <p>La historia municipal estara disponible pronto.</p>
+        </div>
+      </section>
+    </ng-template>
+  </div>
+  <app-sticky-footer></app-sticky-footer>
+</main>

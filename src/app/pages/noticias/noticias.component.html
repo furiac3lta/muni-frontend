@@ -1,0 +1,22 @@
+<main class="page">
+  <header class="page-header">
+    <a class="back" href="/">← Volver</a>
+    <h1>Noticias y comunicados</h1>
+    <p>Ultimas novedades municipales.</p>
+  </header>
+
+  <section class="page-card" *ngIf="(news$ | async)?.length; else placeholder">
+    <article class="item" *ngFor="let item of (news$ | async)">
+      <h3>{{ item.title }}</h3>
+      <div class="rich" [innerHTML]="item.content | richText"></div>
+      <span>{{ item.createdAt }}</span>
+    </article>
+  </section>
+
+  <ng-template #placeholder>
+    <section class="page-card">
+      <p>No hay noticias publicadas por el momento.</p>
+    </section>
+  </ng-template>
+  <app-sticky-footer></app-sticky-footer>
+</main>

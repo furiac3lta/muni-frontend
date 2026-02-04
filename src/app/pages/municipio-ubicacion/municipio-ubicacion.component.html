@@ -1,0 +1,19 @@
+<main class="page">
+  <header class="page-header">
+    <a class="back" href="/">← Volver</a>
+    <h1>Ubicacion</h1>
+    <p>Acceso rapido para llegar al edificio municipal.</p>
+  </header>
+
+  <section class="page-card" *ngIf="info$ | async as info; else placeholder">
+    <p><strong>Direccion:</strong> {{ info.address }}</p>
+    <a class="primary" [href]="info.mapUrl" target="_blank" rel="noopener">Abrir en Google Maps</a>
+  </section>
+
+  <ng-template #placeholder>
+    <section class="page-card">
+      <p>La ubicacion oficial se publicara pronto.</p>
+    </section>
+  </ng-template>
+  <app-sticky-footer></app-sticky-footer>
+</main>
