@@ -1,0 +1,10 @@
+{
+  auto_https off
+}
+
+:{$PORT} {
+  root * /app/dist/puerto-rico-front/browser
+  file_server
+
+  try_files {path} /index.html
+}
