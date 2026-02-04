@@ -3,7 +3,7 @@
 }
 
 :{$PORT} {
-  root * /app/browser
+  root * /app/browser/browser
   file_server
 
   try_files {path} /index.html
