@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Municipio de Puerto Rico">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0b2f5b"/>
+      <stop offset="100%" stop-color="#1f6ed4"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#g)"/>
+  <path d="M256 96l120 52v104c0 92-60 164-120 196-60-32-120-104-120-196V148l120-52z" fill="#ffffff" opacity="0.92"/>
+  <text x="256" y="295" text-anchor="middle" font-family="Alegreya Sans, Trebuchet MS, sans-serif" font-size="120" font-weight="700" fill="#0b2f5b">PR</text>
+</svg>

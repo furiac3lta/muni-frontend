@@ -1,0 +1,23 @@
+{
+  "name": "Municipio de Puerto Rico",
+  "short_name": "Municipio PR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eef4fb",
+  "theme_color": "#0b2f5b",
+  "description": "App municipal de Puerto Rico, Misiones.",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
