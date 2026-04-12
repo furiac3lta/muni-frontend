@@ -1,0 +1,5 @@
+node_modules
+dist
+browser
+.angular
+.DS_Store
