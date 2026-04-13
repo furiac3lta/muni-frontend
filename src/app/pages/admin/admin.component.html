@@ -14,6 +14,7 @@
     <nav>
       <button [class.active]="section === 'municipio'" (click)="setSection('municipio')">Municipio</button>
       <button [class.active]="section === 'noticias'" (click)="setSection('noticias')">Noticias</button>
+      <button [class.active]="section === 'carousel'" (click)="setSection('carousel')">Carrusel</button>
       <button [class.active]="section === 'alertas'" (click)="setSection('alertas')">Alertas</button>
       <button [class.active]="section === 'telefonos'" (click)="setSection('telefonos')">Telefonos</button>
       <button [class.active]="section === 'turismo'" (click)="setSection('turismo')">Turismo</button>
@@ -125,6 +126,69 @@
               Editar
             </button>
             <button class="danger" (click)="deleteNews(item)">
+              <i class="fa-solid fa-trash"></i>
+              Eliminar
+            </button>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel" *ngIf="section === 'carousel'">
+      <h2>Carrusel</h2>
+      <div class="form-grid">
+        <label>
+          Titulo
+          <input [(ngModel)]="carouselForm.title" />
+        </label>
+        <label>
+          Subtitulo
+          <textarea [(ngModel)]="carouselForm.subtitle"></textarea>
+        </label>
+        <label>
+          Texto del botón
+          <input [(ngModel)]="carouselForm.buttonText" />
+        </label>
+        <label>
+          URL de la imagen
+          <input [(ngModel)]="carouselForm.imageUrl" />
+        </label>
+        <label>
+          Subir imagen del carrusel
+          <input type="file" (change)="handleCarouselImageUpload($event)" />
+          <small>{{ uploadMessage }}</small>
+        </label>
+        <label>
+          Posición
+          <input type="number" [(ngModel)]="carouselForm.position" />
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="carouselForm.active" />
+          Activo
+        </label>
+      </div>
+      <div class="actions">
+        <button class="primary" (click)="saveCarouselSlide()">
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ selectedCarouselSlide ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button class="ghost" (click)="resetCarouselSlide()">
+          <i class="fa-solid fa-rotate-left"></i>
+          Limpiar
+        </button>
+      </div>
+      <ul class="list">
+        <li *ngFor="let item of carouselSlides">
+          <div>
+            <strong>{{ item.title }}</strong>
+            <span>Posición {{ item.position }}</span>
+          </div>
+          <div class="row-actions">
+            <button class="ghost" (click)="editCarouselSlide(item)">
+              <i class="fa-solid fa-pen"></i>
+              Editar
+            </button>
+            <button class="danger" (click)="deleteCarouselSlide(item)">
               <i class="fa-solid fa-trash"></i>
               Eliminar
             </button>

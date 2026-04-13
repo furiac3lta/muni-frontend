@@ -3,13 +3,13 @@
 }
 
 :root {
-  --bg: #f9fafb;
+  --bg: #f8f9ff;
   --surface: #ffffff;
-  --surface-2: #f1f5f9;
-  --text: #334155;
-  --text-muted: #64748b;
-  --border: #e5e7eb;
-  --primary: #2563eb;
+  --surface-2: #eef2ff;
+  --text: #10225d;
+  --text-muted: #475569;
+  --border: #e2e8f0;
+  --primary: #0d6efd;
   --primary-contrast: #ffffff;
   --shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
   --success: #22c55e;
@@ -22,7 +22,7 @@
   --color-secondary: var(--surface-2);
   --color-bg: var(--bg);
   --color-surface: var(--surface);
-  --color-text: #0f172a;
+  --color-text: #10225d;
   --color-muted: var(--text-muted);
   --color-border: var(--border);
   --color-success: var(--success);
@@ -65,8 +65,9 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: "Alegreya Sans", "Trebuchet MS", "Segoe UI", sans-serif;
+  font-family: 'Poppins', 'Alegreya Sans', 'Trebuchet MS', 'Segoe UI', sans-serif;
   overflow-x: hidden;
+  min-height: 100vh;
   padding-bottom: 110px;
 }
 

@@ -1,7 +1,7 @@
 {
   "configVersion": 1,
-  "timestamp": 1776033442185,
-  "index": "/proyecto/municipio/index.html",
+  "timestamp": 1776040628015,
+  "index": "/index.html",
   "assetGroups": [
     {
       "name": "app",
@@ -11,12 +11,12 @@
         "ignoreVary": true
       },
       "urls": [
-        "/proyecto/municipio/favicon.ico",
-        "/proyecto/municipio/index.html",
-        "/proyecto/municipio/main-B7JLQFNM.js",
-        "/proyecto/municipio/manifest.webmanifest",
-        "/proyecto/municipio/polyfills-5CFQRCPP.js",
-        "/proyecto/municipio/styles-QGKM2TZG.css"
+        "/favicon.ico",
+        "/index.html",
+        "/main.js",
+        "/manifest.webmanifest",
+        "/polyfills.js",
+        "/styles.css"
       ],
       "patterns": []
     },
@@ -28,7 +28,7 @@
         "ignoreVary": true
       },
       "urls": [
-        "/proyecto/municipio/icons/icon.svg"
+        "/icons/icon.svg"
       ],
       "patterns": []
     }
@@ -50,13 +50,13 @@
     }
   ],
   "hashTable": {
-    "/proyecto/municipio/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "/proyecto/municipio/icons/icon.svg": "ccc0643592fab422743c49c019e7764f5fa70e59",
-    "/proyecto/municipio/index.html": "74c7886b2a5e923d63eb3085ea866ceac9f48200",
-    "/proyecto/municipio/main-B7JLQFNM.js": "bab8f5253ad12bdd9b5925d65faa59828c196469",
-    "/proyecto/municipio/manifest.webmanifest": "dc073a40682e24f57cda250df10de88cc02f40c8",
-    "/proyecto/municipio/polyfills-5CFQRCPP.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
-    "/proyecto/municipio/styles-QGKM2TZG.css": "8230ef98a0c7819dfefe57794f8d306d49a0f01f"
+    "/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "/icons/icon.svg": "ccc0643592fab422743c49c019e7764f5fa70e59",
+    "/index.html": "fa406f9bfd9f2b4ff913bfc0712cf174b1b21841",
+    "/main.js": "ba6f620b61c6cbc7ddc195669338c0010ea7499e",
+    "/manifest.webmanifest": "dc073a40682e24f57cda250df10de88cc02f40c8",
+    "/polyfills.js": "321b3a888edbd93081a92e1659c272f85bbaf088",
+    "/styles.css": "6ba0bff04e632e88f76937ec78f2306b8cac5e4f"
   },
   "navigationUrls": [
     {

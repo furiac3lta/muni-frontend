@@ -1,0 +1,39 @@
+<section class="hero-section" aria-label="Carrusel principal">
+  <div class="hero-list">
+    <article
+      *ngFor="let slide of slides; let idx = index"
+      class="hero-slide"
+      [class.active]="idx === activeIndex"
+      [style.backgroundImage]="'url(' + slide.imageUrl + ')'"
+    >
+      <div class="hero-overlay"></div>
+      <div class="hero-copy">
+        <span class="hero-label" *ngIf="slide.buttonText">{{ slide.buttonText }}</span>
+        <h1>{{ slide.title }}</h1>
+        <p>{{ slide.subtitle }}</p>
+        <div class="hero-actions">
+          <a class="hero-button hero-button-primary" href="#servicios">{{ slide.buttonText || 'Explorar' }}</a>
+          <a class="hero-button hero-button-secondary" href="#noticias">Noticias</a>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <button class="hero-control hero-control-prev" type="button" aria-label="Anterior" (click)="prev()">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+  <button class="hero-control hero-control-next" type="button" aria-label="Siguiente" (click)="next()">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+
+  <div class="hero-indicators" role="tablist">
+    <button
+      *ngFor="let slide of slides; let idx = index"
+      type="button"
+      class="indicator"
+      [class.active]="idx === activeIndex"
+      (click)="goTo(idx)"
+      [attr.aria-label]="'Ver diapositiva ' + (idx + 1)"
+    ></button>
+  </div>
+</section>

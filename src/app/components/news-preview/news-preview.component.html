@@ -1,0 +1,19 @@
+<section class="news-section" id="noticias">
+  <div class="section-header">
+    <span>Noticias recientes</span>
+    <h2>Actualidad municipal con estilo editorial</h2>
+    <p>Contenido destacado de avisos, eventos y comunicados oficiales en un bloque visual claro.</p>
+  </div>
+
+  <div class="news-grid">
+    <article class="news-card" *ngFor="let article of articles">
+      <div class="news-card-top">
+        <span>{{ article.category }}</span>
+        <strong>{{ article.date }}</strong>
+      </div>
+      <h3>{{ article.title }}</h3>
+      <p>{{ article.excerpt }}</p>
+      <a class="news-link" href="#">Leer más</a>
+    </article>
+  </div>
+</section>

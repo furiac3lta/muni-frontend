@@ -20,6 +20,8 @@ import { PublicServicesService } from '../../services/public-services.service';
 import { TourismService } from '../../services/tourism.service';
 import { UploadService } from '../../services/upload.service';
 import { AdminUser, AdminUserRequest, AdminUsersService } from '../../services/admin-users.service';
+import { CarouselSlide } from '../../models/carousel-slide';
+import { CarouselService } from '../../services/carousel.service';
 import { StickyFooterComponent } from '../../components/sticky-footer/sticky-footer.component';
 
 @Component({
@@ -40,6 +42,7 @@ export class AdminComponent implements OnInit {
   tourism: TouristPlace[] = [];
   businesses: Business[] = [];
   services: PublicService[] = [];
+  carouselSlides: CarouselSlide[] = [];
   adminUsers: AdminUser[] = [];
 
   newsForm: Partial<NewsItem> = { active: true };
@@ -57,6 +60,8 @@ export class AdminComponent implements OnInit {
   selectedBusiness?: Business;
   selectedService?: PublicService;
   selectedAdminUser?: AdminUser;
+  selectedCarouselSlide?: CarouselSlide;
+  carouselForm: Partial<CarouselSlide> = { title: '', subtitle: '', buttonText: '', imageUrl: '', active: true, position: 0 };
 
   uploadBusy = false;
   uploadMessage = '';
@@ -74,6 +79,7 @@ export class AdminComponent implements OnInit {
     private readonly tourismService: TourismService,
     private readonly businessService: BusinessService,
     private readonly publicServicesService: PublicServicesService,
+    private readonly carouselService: CarouselService,
     private readonly adminUsersService: AdminUsersService,
     private readonly uploadService: UploadService,
     private readonly authService: AuthService
@@ -108,6 +114,7 @@ export class AdminComponent implements OnInit {
     this.tourismService.getPlaces().subscribe((items) => (this.tourism = items));
     this.businessService.getBusinesses().subscribe((items) => (this.businesses = items));
     this.publicServicesService.getServices().subscribe((items) => (this.services = items));
+    this.carouselService.getSlides().subscribe((items) => (this.carouselSlides = items));
     this.adminUsersService.getUsers().subscribe((items) => (this.adminUsers = items));
   }
 
@@ -301,8 +308,8 @@ export class AdminComponent implements OnInit {
         this.publicServicesService.createService(this.serviceForm),
         'Servicio creado correctamente.',
         () => {
-        this.resetService();
-        this.refreshAll();
+          this.resetService();
+          this.refreshAll();
         }
       );
     }
@@ -311,6 +318,49 @@ export class AdminComponent implements OnInit {
   editService(item: PublicService): void {
     this.selectedService = item;
     this.serviceForm = { ...item };
+  }
+
+  saveCarouselSlide(): void {
+    if (this.selectedCarouselSlide) {
+      this.runAction(
+        this.carouselService.updateSlide(this.selectedCarouselSlide.id as number, this.carouselForm),
+        'Slide del carrusel actualizado correctamente.',
+        () => {
+          this.resetCarouselSlide();
+          this.refreshAll();
+        }
+      );
+    } else {
+      this.runAction(
+        this.carouselService.createSlide(this.carouselForm),
+        'Slide del carrusel creado correctamente.',
+        () => {
+          this.resetCarouselSlide();
+          this.refreshAll();
+        }
+      );
+    }
+  }
+
+  editCarouselSlide(item: CarouselSlide): void {
+    this.selectedCarouselSlide = item;
+    this.carouselForm = { ...item };
+  }
+
+  deleteCarouselSlide(item: CarouselSlide): void {
+    if (!confirm(`Se eliminará el slide "${item.title}". Deseas continuar?`)) {
+      return;
+    }
+    this.runAction(this.carouselService.deleteSlide(item.id as number), 'Slide del carrusel eliminado correctamente.', () => {
+      this.resetCarouselSlide();
+      this.refreshAll();
+    });
+  }
+
+  resetCarouselSlide(): void {
+    this.selectedCarouselSlide = undefined;
+    this.carouselForm = { title: '', subtitle: '', buttonText: '', imageUrl: '', active: true, position: 0 };
+    this.carouselService.getSlides().subscribe((items) => (this.carouselSlides = items));
   }
 
   resetService(): void {
@@ -401,6 +451,27 @@ export class AdminComponent implements OnInit {
         this.uploadBusy = false;
         this.uploadMessage = 'No se pudo subir la imagen.';
         this.setFeedback('error', 'No se pudo subir la imagen de la noticia.');
+      }
+    });
+  }
+
+  handleCarouselImageUpload(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    this.uploadBusy = true;
+    this.uploadMessage = '';
+    this.uploadService.uploadImage(file).subscribe({
+      next: (url) => {
+        this.uploadBusy = false;
+        this.carouselForm.imageUrl = url;
+        this.uploadMessage = 'Imagen del carrusel subida correctamente.';
+        this.setFeedback('success', 'Imagen del carrusel cargada y lista para guardar.');
+      },
+      error: () => {
+        this.uploadBusy = false;
+        this.uploadMessage = 'No se pudo subir la imagen.';
+        this.setFeedback('error', 'No se pudo subir la imagen del carrusel.');
       }
     });
   }

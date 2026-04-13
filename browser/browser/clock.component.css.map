@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/clock/clock.component.css"],
+  "sourcesContent": [".clock {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.5rem;\n  font-size: 0.85rem;\n  color: var(--color-muted);\n  padding: 0.15rem 0;\n}\n\n.clock i {\n  color: var(--color-primary);\n}\n"],
+  "mappings": ";AAAA,CAAC;AACC,WAAS;AACT,eAAa;AACb,OAAK;AACL,aAAW;AACX,SAAO,IAAI;AACX,WAAS,QAAQ;AACnB;AAEA,CATC,MASM;AACL,SAAO,IAAI;AACb;",
+  "names": []
+}
