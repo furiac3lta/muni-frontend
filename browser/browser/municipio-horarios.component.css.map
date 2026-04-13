@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/pages/municipio-horarios/municipio-horarios.component.css"],
-  "sourcesContent": [".page {\n  min-height: 100vh;\n  padding: 2rem 1.5rem 3rem;\n  background: var(--color-bg);\n  font-family: \"Alegreya Sans\", \"Trebuchet MS\", \"Segoe UI\", sans-serif;\n}\n\n.page-header {\n  text-align: left;\n  display: grid;\n  gap: 0.5rem;\n  margin-bottom: 1.5rem;\n}\n\n.page-header h1 {\n  margin: 0;\n  font-size: 1.9rem;\n}\n\n.page-header p {\n  margin: 0;\n  color: var(--color-muted);\n}\n\n.back {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.4rem;\n  color: var(--color-primary);\n  text-decoration: none;\n  font-weight: 700;\n}\n\n.page-card {\n  background: var(--color-surface);\n  border-radius: 18px;\n  padding: 1.5rem;\n  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);\n}\n\n@media (max-width: 720px) {\n  .page-header {\n    text-align: center;\n  }\n\n  .back {\n    justify-content: center;\n  }\n}\n"],
-  "mappings": ";AAAA,CAAC;AACC,cAAY;AACZ,WAAS,KAAK,OAAO;AACrB,cAAY,IAAI;AAChB;AAAA,IAAa,eAAe;AAAA,IAAE,cAAc;AAAA,IAAE,UAAU;AAAA,IAAE;AAC5D;AAEA,CAAC;AACC,cAAY;AACZ,WAAS;AACT,OAAK;AACL,iBAAe;AACjB;AAEA,CAPC,YAOY;AACX,UAAQ;AACR,aAAW;AACb;AAEA,CAZC,YAYY;AACX,UAAQ;AACR,SAAO,IAAI;AACb;AAEA,CAAC;AACC,WAAS;AACT,eAAa;AACb,OAAK;AACL,SAAO,IAAI;AACX,mBAAiB;AACjB,eAAa;AACf;AAEA,CAAC;AACC,cAAY,IAAI;AAChB,iBAAe;AACf,WAAS;AACT,cAAY,EAAE,KAAK,KAAK,KAAK,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE;AAC3C;AAEA,OAAO,CAAC,SAAS,EAAE;AACjB,GAlCD;AAmCG,gBAAY;AACd;AAEA,GArBD;AAsBG,qBAAiB;AACnB;AACF;",
-  "names": []
-}
