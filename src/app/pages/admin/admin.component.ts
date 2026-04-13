@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 
 import { AlertItem, AlertType } from '../../models/alert';
 import { Business } from '../../models/business';
@@ -60,6 +60,9 @@ export class AdminComponent implements OnInit {
 
   uploadBusy = false;
   uploadMessage = '';
+  feedbackMessage = '';
+  feedbackType: 'success' | 'error' = 'success';
+  private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   readonly alertTypes: AlertType[] = ['CLIMA', 'CORTE', 'AVISO'];
 
@@ -109,20 +112,28 @@ export class AdminComponent implements OnInit {
   }
 
   saveMunicipality(): void {
-    this.municipalityService.updateInfo(this.municipalInfo).subscribe((info) => {
-      this.municipalInfo = info;
-      this.refreshAll();
-    });
+    this.runAction(
+      this.municipalityService.updateInfo(this.municipalInfo),
+      'Informacion municipal actualizada correctamente.',
+      (info) => {
+        this.municipalInfo = info;
+        this.refreshAll();
+      }
+    );
   }
 
   saveNews(): void {
     if (this.selectedNews) {
-      this.newsService.updateNews(this.selectedNews.id, this.newsForm).subscribe(() => {
-        this.resetNews();
-        this.refreshAll();
-      });
+      this.runAction(
+        this.newsService.updateNews(this.selectedNews.id, this.newsForm),
+        'Noticia actualizada correctamente.',
+        () => {
+          this.resetNews();
+          this.refreshAll();
+        }
+      );
     } else {
-      this.newsService.createNews(this.newsForm).subscribe(() => {
+      this.runAction(this.newsService.createNews(this.newsForm), 'Noticia creada correctamente.', () => {
         this.resetNews();
         this.refreshAll();
       });
@@ -135,7 +146,10 @@ export class AdminComponent implements OnInit {
   }
 
   deleteNews(item: NewsItem): void {
-    this.newsService.deleteNews(item.id).subscribe(() => {
+    if (!confirm(`Se eliminara la noticia "${item.title}". Queres continuar?`)) {
+      return;
+    }
+    this.runAction(this.newsService.deleteNews(item.id), 'Noticia eliminada correctamente.', () => {
       this.resetNews();
       this.refreshAll();
     });
@@ -149,12 +163,16 @@ export class AdminComponent implements OnInit {
 
   saveAlert(): void {
     if (this.selectedAlert) {
-      this.alertsService.updateAlert(this.selectedAlert.id, this.alertForm).subscribe(() => {
-        this.resetAlerts();
-        this.refreshAll();
-      });
+      this.runAction(
+        this.alertsService.updateAlert(this.selectedAlert.id, this.alertForm),
+        'Alerta actualizada correctamente.',
+        () => {
+          this.resetAlerts();
+          this.refreshAll();
+        }
+      );
     } else {
-      this.alertsService.createAlert(this.alertForm).subscribe(() => {
+      this.runAction(this.alertsService.createAlert(this.alertForm), 'Alerta creada correctamente.', () => {
         this.resetAlerts();
         this.refreshAll();
       });
@@ -174,14 +192,16 @@ export class AdminComponent implements OnInit {
 
   saveContact(): void {
     if (this.selectedContact) {
-      this.contactsService
-        .updateContact(this.selectedContact.id, this.contactForm)
-        .subscribe(() => {
+      this.runAction(
+        this.contactsService.updateContact(this.selectedContact.id, this.contactForm),
+        'Contacto actualizado correctamente.',
+        () => {
           this.resetContacts();
           this.refreshAll();
-        });
+        }
+      );
     } else {
-      this.contactsService.createContact(this.contactForm).subscribe(() => {
+      this.runAction(this.contactsService.createContact(this.contactForm), 'Contacto creado correctamente.', () => {
         this.resetContacts();
         this.refreshAll();
       });
@@ -207,14 +227,16 @@ export class AdminComponent implements OnInit {
       this.tourismForm.imageUrl = this.tourismForm.imageUrls[0];
     }
     if (this.selectedTourism) {
-      this.tourismService
-        .updatePlace(this.selectedTourism.id, this.tourismForm)
-        .subscribe(() => {
+      this.runAction(
+        this.tourismService.updatePlace(this.selectedTourism.id, this.tourismForm),
+        'Lugar turistico actualizado correctamente.',
+        () => {
           this.resetTourism();
           this.refreshAll();
-        });
+        }
+      );
     } else {
-      this.tourismService.createPlace(this.tourismForm).subscribe(() => {
+      this.runAction(this.tourismService.createPlace(this.tourismForm), 'Lugar turistico creado correctamente.', () => {
         this.resetTourism();
         this.refreshAll();
       });
@@ -237,14 +259,16 @@ export class AdminComponent implements OnInit {
 
   saveBusiness(): void {
     if (this.selectedBusiness) {
-      this.businessService
-        .updateBusiness(this.selectedBusiness.id, this.businessForm)
-        .subscribe(() => {
+      this.runAction(
+        this.businessService.updateBusiness(this.selectedBusiness.id, this.businessForm),
+        'Comercio actualizado correctamente.',
+        () => {
           this.resetBusiness();
           this.refreshAll();
-        });
+        }
+      );
     } else {
-      this.businessService.createBusiness(this.businessForm).subscribe(() => {
+      this.runAction(this.businessService.createBusiness(this.businessForm), 'Comercio creado correctamente.', () => {
         this.resetBusiness();
         this.refreshAll();
       });
@@ -264,17 +288,23 @@ export class AdminComponent implements OnInit {
 
   saveService(): void {
     if (this.selectedService) {
-      this.publicServicesService
-        .updateService(this.selectedService.id, this.serviceForm)
-        .subscribe(() => {
+      this.runAction(
+        this.publicServicesService.updateService(this.selectedService.id, this.serviceForm),
+        'Servicio actualizado correctamente.',
+        () => {
           this.resetService();
           this.refreshAll();
-        });
+        }
+      );
     } else {
-      this.publicServicesService.createService(this.serviceForm).subscribe(() => {
+      this.runAction(
+        this.publicServicesService.createService(this.serviceForm),
+        'Servicio creado correctamente.',
+        () => {
         this.resetService();
         this.refreshAll();
-      });
+        }
+      );
     }
   }
 
@@ -291,17 +321,23 @@ export class AdminComponent implements OnInit {
 
   saveAdminUser(): void {
     if (this.selectedAdminUser) {
-      this.adminUsersService
-        .updateUser(this.selectedAdminUser.id, this.adminUserForm)
-        .subscribe(() => {
+      this.runAction(
+        this.adminUsersService.updateUser(this.selectedAdminUser.id, this.adminUserForm),
+        'Usuario administrador actualizado correctamente.',
+        () => {
           this.resetAdminUsers();
           this.refreshAll();
-        });
+        }
+      );
     } else {
-      this.adminUsersService.createUser(this.adminUserForm).subscribe(() => {
+      this.runAction(
+        this.adminUsersService.createUser(this.adminUserForm),
+        'Usuario administrador creado correctamente.',
+        () => {
         this.resetAdminUsers();
         this.refreshAll();
-      });
+        }
+      );
     }
   }
 
@@ -336,10 +372,12 @@ export class AdminComponent implements OnInit {
           this.tourismForm.imageUrl = this.tourismForm.imageUrls[0];
         }
         this.uploadMessage = 'Imagenes subidas correctamente.';
+        this.setFeedback('success', 'Imagenes cargadas correctamente para turismo.');
       },
       error: () => {
         this.uploadBusy = false;
         this.uploadMessage = 'No se pudo subir la imagen.';
+        this.setFeedback('error', 'No se pudieron subir las imagenes de turismo.');
       }
     });
   }
@@ -357,12 +395,46 @@ export class AdminComponent implements OnInit {
         const separator = current ? '\n\n' : '';
         this.newsForm.content = `${current}${separator}![Imagen](${url})\n`;
         this.uploadMessage = 'Imagen subida y agregada al contenido.';
+        this.setFeedback('success', 'Imagen de noticia subida y vinculada correctamente.');
       },
       error: () => {
         this.uploadBusy = false;
         this.uploadMessage = 'No se pudo subir la imagen.';
+        this.setFeedback('error', 'No se pudo subir la imagen de la noticia.');
       }
     });
+  }
+
+  clearFeedback(): void {
+    this.feedbackMessage = '';
+    if (this.feedbackTimer) {
+      clearTimeout(this.feedbackTimer);
+      this.feedbackTimer = undefined;
+    }
+  }
+
+  private runAction<T>(request$: Observable<T>, successMessage: string, onSuccess: (value: T) => void): void {
+    request$.subscribe({
+      next: (value) => {
+        onSuccess(value);
+        this.setFeedback('success', successMessage);
+      },
+      error: () => {
+        this.setFeedback('error', 'No se pudo completar el cambio. Revisa los datos e intenta nuevamente.');
+      }
+    });
+  }
+
+  private setFeedback(type: 'success' | 'error', message: string): void {
+    this.feedbackType = type;
+    this.feedbackMessage = message;
+    if (this.feedbackTimer) {
+      clearTimeout(this.feedbackTimer);
+    }
+    this.feedbackTimer = setTimeout(() => {
+      this.feedbackMessage = '';
+      this.feedbackTimer = undefined;
+    }, 5000);
   }
 
   logout(): void {

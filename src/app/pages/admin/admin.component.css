@@ -127,6 +127,46 @@
   font-size: 0.9rem;
 }
 
+.feedback-banner {
+  margin-top: 1rem;
+  border-radius: 16px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid transparent;
+}
+
+.feedback-banner.success {
+  background: #ecfdf3;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.feedback-banner.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.feedback-banner > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.feedback-banner strong {
+  font-size: 0.95rem;
+}
+
+.feedback-close {
+  background: transparent;
+  border: none;
+  color: inherit;
+  padding: 0.1rem;
+  border-radius: 8px;
+}
+
 .panel {
   background: var(--color-surface);
   border-radius: 20px;

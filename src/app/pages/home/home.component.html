@@ -1,29 +1,74 @@
 <main class="app">
-  <header class="hero" id="inicio">
-    <div class="hero-top">
-      <div class="brand">
-        <div class="logo" aria-hidden="true">PR</div>
-        <div>
-          <p class="eyebrow">Municipio de Puerto Rico, Misiones</p>
-          <h1>Tu municipio en el bolsillo</h1>
-          <p class="hero-subtitle">
-            Informacion clara, rapida y accesible para vecinas y vecinos.
-          </p>
+  <header class="hero-shell" id="inicio">
+    <div class="hero-decor hero-decor-a"></div>
+    <div class="hero-decor hero-decor-b"></div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Demo Municipio</p>
+        <h1>Una plataforma municipal con mas presencia, claridad y vida visual.</h1>
+        <p class="hero-subtitle">
+          Noticias, contactos, alertas, servicios y contenidos destacados en una portada pensada para convencer en una demo real.
+        </p>
+
+        <div class="hero-cta">
+          <a class="hero-button primary" href="#municipio">Explorar secciones</a>
+          <a class="hero-button secondary" [routerLink]="'/admin/login'">Entrar al panel</a>
+        </div>
+
+        <div class="hero-strip">
+          <article class="strip-card">
+            <span>Alertas</span>
+            <strong>{{ (alerts$ | async)?.length || 0 }}</strong>
+          </article>
+          <article class="strip-card">
+            <span>Noticias</span>
+            <strong>{{ (news$ | async)?.length || 0 }}</strong>
+          </article>
+          <article class="strip-card">
+            <span>Servicios</span>
+            <strong>{{ (services$ | async)?.length || 0 }}</strong>
+          </article>
+          <article class="strip-card">
+            <span>Telefonos</span>
+            <strong>{{ (contacts$ | async)?.length || 0 }}</strong>
+          </article>
         </div>
       </div>
-      <div class="hero-weather">
-        <div class="section-header">
-          <!-- <h2>Clima en Puerto Rico</h2>
-          <p>Actualizacion en tiempo real.</p> -->
-        </div>
-        <article class="card card-link" [routerLink]="'/alertas'" *ngIf="weather$ | async as weather; else climaPlaceholderTop">
+
+      <div class="hero-stage">
+        <article class="hero-feature" *ngIf="featuredTourism$ | async as featured; else featureFallback">
+          <div
+            class="hero-feature-media"
+            [style.background-image]="featured.imageUrls?.[0] ? 'url(' + featured.imageUrls?.[0] + ')' : featured.imageUrl ? 'url(' + featured.imageUrl + ')' : null"
+          ></div>
+          <div class="hero-feature-copy">
+            <p class="card-tag">Lugar destacado</p>
+            <h2>{{ featured.name }}</h2>
+            <p class="excerpt">{{ featured.description | plainText }}</p>
+            <a class="ghost" [routerLink]="'/turismo'">Ver recorrido visual</a>
+          </div>
+        </article>
+        <ng-template #featureFallback>
+          <article class="hero-feature fallback">
+            <div class="hero-feature-copy">
+              <p class="card-tag">Demo institucional</p>
+              <h2>Portada visual adaptable a cada municipio</h2>
+              <p>
+                Esta maqueta usa bloques editoriales, imagen principal y accesos rapidos para presentar una experiencia mucho mas potente.
+              </p>
+            </div>
+          </article>
+        </ng-template>
+
+        <article class="floating-card weather-float" [routerLink]="'/alertas'" *ngIf="weather$ | async as weather; else climaPlaceholderTop">
+          <span class="card-tag">Clima</span>
           <div class="weather-head">
-          <i
-            class="weather-icon"
-            [ngClass]="[weatherService.mapWeatherIcon(weather.current_weather.weathercode), weatherService.mapWeatherColor(weather.current_weather.weathercode)]"
-          ></i>
+            <i
+              class="weather-icon"
+              [ngClass]="[weatherService.mapWeatherIcon(weather.current_weather.weathercode), weatherService.mapWeatherColor(weather.current_weather.weathercode)]"
+            ></i>
             <div>
-              <strong>{{ weather.current_weather.temperature }}°C  </strong>
+              <strong>{{ weather.current_weather.temperature }}°C</strong>
               <span>{{ weatherService.mapWeatherCode(weather.current_weather.weathercode) }}</span>
             </div>
           </div>
@@ -34,9 +79,23 @@
           </div>
         </article>
         <ng-template #climaPlaceholderTop>
-          <article class="card card-link" [routerLink]="'/alertas'">
-          <h3>Clima en Puerto Rico</h3>
-            <p>No se pudo obtener el clima.</p>
+          <article class="floating-card weather-float" [routerLink]="'/alertas'">
+            <span class="card-tag">Clima</span>
+            <h3>Estado del tiempo</h3>
+            <p>No se pudo obtener la informacion climatica.</p>
+          </article>
+        </ng-template>
+
+        <article class="floating-card headline-float" [routerLink]="'/noticias'" *ngIf="headlineNews$ | async as headline; else headlineFallback">
+          <span class="card-tag">Titular</span>
+          <h3>{{ headline.title }}</h3>
+          <p class="excerpt">{{ headline.content | plainText }}</p>
+        </article>
+        <ng-template #headlineFallback>
+          <article class="floating-card headline-float" [routerLink]="'/noticias'">
+            <span class="card-tag">Titular</span>
+            <h3>Espacio listo para noticias y comunicados</h3>
+            <p>La portada puede destacar informacion institucional con mucha mas presencia visual.</p>
           </article>
         </ng-template>
       </div>
@@ -58,7 +117,7 @@
     </div>
 
     <nav class="section-nav" aria-label="Navegacion principal">
-      <a href="#municipio">Municipio</a>
+      <a href="#municipio">Institucional</a>
       <a [routerLink]="'/telefonos'">Telefonos</a>
       <a [routerLink]="'/turismo'">Turismo</a>
       <a [routerLink]="'/comercios'">Comercios</a>
@@ -70,14 +129,15 @@
 
   <section class="section" id="municipio">
     <div class="section-header">
-      <h2>Informacion del Municipio</h2>
-      <p>Datos ordenados y faciles de encontrar.</p>
+      <h2>Informacion institucional</h2>
+      <p>Bloques pensados para presentar identidad, gestion y datos utiles con una estetica mas contemporanea.</p>
     </div>
 
     <div class="card-grid" *ngIf="municipalInfo$ | async as info; else municipalFallback">
       <article class="card card-link card-accent-1" [routerLink]="'/municipio/historia'">
         <div class="card-header">
-          <h3>Historia de Puerto Rico</h3>
+          <p class="card-tag">Identidad</p>
+          <h3>Historia institucional</h3>
         </div>
         <div class="card-body">
           <p class="excerpt">{{ info.history | plainText }}</p>
@@ -89,6 +149,7 @@
 
       <article class="card map-card card-link card-accent-2" [routerLink]="'/municipio/ubicacion'">
         <div class="card-header">
+          <p class="card-tag">Ubicacion</p>
           <h3>Ubicacion</h3>
         </div>
         <div class="card-body">
@@ -101,6 +162,7 @@
 
       <article class="card card-link card-accent-3" [routerLink]="'/municipio/horarios'">
         <div class="card-header">
+          <p class="card-tag">Atencion</p>
           <h3>Horarios municipales</h3>
         </div>
         <div class="card-body">
@@ -115,10 +177,11 @@
       <div class="card-grid">
         <article class="card card-link card-accent-1" [routerLink]="'/municipio/historia'">
           <div class="card-header">
-            <h3>Historia de Puerto Rico</h3>
+            <p class="card-tag">Identidad</p>
+            <h3>Historia institucional</h3>
           </div>
           <div class="card-body">
-            <p>Actualizando informacion municipal.</p>
+            <p>Actualizando contenido institucional de demostracion.</p>
           </div>
           <div class="card-footer">
             <button class="ghost">Leer historia completa</button>
@@ -126,6 +189,7 @@
         </article>
         <article class="card map-card card-link card-accent-2" [routerLink]="'/municipio/ubicacion'">
           <div class="card-header">
+            <p class="card-tag">Ubicacion</p>
             <h3>Ubicacion</h3>
           </div>
           <div class="card-body">
@@ -137,6 +201,7 @@
         </article>
         <article class="card card-link card-accent-3" [routerLink]="'/municipio/horarios'">
           <div class="card-header">
+            <p class="card-tag">Atencion</p>
             <h3>Horarios municipales</h3>
           </div>
           <div class="card-body">
@@ -152,6 +217,7 @@
     <div class="card-grid">
       <article class="card card-link card-accent-2" [routerLink]="'/noticias'" *ngIf="(news$ | async)?.length; else newsPlaceholder">
         <div class="card-header">
+          <p class="card-tag">Actualidad</p>
           <h3>Noticias y comunicados</h3>
         </div>
         <div class="card-body">
@@ -169,6 +235,7 @@
       <ng-template #newsPlaceholder>
         <article class="card card-link card-accent-2" [routerLink]="'/noticias'">
           <div class="card-header">
+            <p class="card-tag">Actualidad</p>
             <h3>Noticias y comunicados</h3>
           </div>
           <div class="card-body">
@@ -180,6 +247,7 @@
 
       <article class="card card-link card-accent-3" id="alertas" [routerLink]="'/alertas'" *ngIf="(alerts$ | async)?.length; else alertsPlaceholder">
         <div class="card-header">
+          <p class="card-tag">Prioridad</p>
           <h3>Alertas importantes</h3>
         </div>
         <div class="card-body">
@@ -201,6 +269,7 @@
       <ng-template #alertsPlaceholder>
         <article class="card card-link card-accent-3" id="alertas" [routerLink]="'/alertas'">
           <div class="card-header">
+            <p class="card-tag">Prioridad</p>
             <h3>Alertas importantes</h3>
           </div>
           <div class="card-body">
@@ -212,6 +281,7 @@
 
       <article class="card card-link card-accent-1 install-card" [routerLink]="'/instalar'">
         <div class="card-header">
+          <p class="card-tag">Acceso rapido</p>
           <h3>Instalar en el celular</h3>
         </div>
         <div class="card-body">
@@ -235,7 +305,7 @@
   <section class="section" id="telefonos">
     <div class="section-header">
       <h2>Telefonos importantes</h2>
-      <p>Un toque para llamar. Tarjetas grandes y claras.</p>
+      <p>Tarjetas amplias, rapidas de usar y pensadas para contacto inmediato.</p>
     </div>
 
     <div class="phone-grid" *ngIf="(contacts$ | async)?.length; else contactsPlaceholder">
@@ -264,7 +334,7 @@
   <section class="section" id="turismo">
     <div class="section-header">
       <h2>Turismo</h2>
-      <p>Descubri lugares, eventos y espacios verdes.</p>
+      <p>Una seccion visual para destacar lugares, naturaleza, eventos y recorridos.</p>
     </div>
 
     <div class="card-grid tourism-grid" *ngIf="(tourism$ | async)?.length; else tourismPlaceholder">
@@ -302,7 +372,7 @@
   <section class="section" id="comercios">
     <div class="section-header">
       <h2>Comercios y negocios locales</h2>
-      <p>Listado informativo, pensado para destacar futuro contenido.</p>
+      <p>Grupos por rubro con foco en descubrimiento rapido y presencia comercial.</p>
     </div>
 
     <div class="card-grid commerce-grid" *ngIf="(businessesByCategory$ | async)?.length; else businessPlaceholder">
@@ -340,7 +410,7 @@
   <section class="section" id="servicios">
     <div class="section-header">
       <h2>Servicios utiles</h2>
-      <p>Informacion practica. Sin formularios complejos.</p>
+      <p>Accesos informativos para tramites, horarios y orientacion a vecinos.</p>
     </div>
 
     <div class="card-grid" *ngIf="(services$ | async)?.length; else servicesPlaceholder">

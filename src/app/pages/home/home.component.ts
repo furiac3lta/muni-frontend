@@ -39,6 +39,7 @@ export class HomeComponent {
   );
   readonly contacts$ = this.contactsService.getContacts().pipe(catchError(() => of([])));
   readonly tourism$ = this.tourismService.getPlaces().pipe(catchError(() => of([])));
+  readonly featuredTourism$ = this.tourism$.pipe(map((items) => items[0] ?? null));
   readonly businesses$ = this.businessService.getBusinesses().pipe(catchError(() => of([])));
   readonly businessesByCategory$ = this.businesses$.pipe(
     map((items) => {
@@ -54,5 +55,12 @@ export class HomeComponent {
   );
   readonly services$ = this.publicServicesService.getServices().pipe(catchError(() => of([])));
   readonly weather$ = this.weatherService.getWeather().pipe(catchError(() => of(null)));
-
+  readonly headlineNews$ = this.news$.pipe(map((items) => items[0] ?? null));
+  readonly heroStats$ = this.businessesByCategory$.pipe(
+    map((groups) => [
+      { label: 'Rubros', value: groups.length || 6 },
+      { label: 'Servicios', value: 0 },
+      { label: 'Contactos', value: 0 }
+    ])
+  );
 }

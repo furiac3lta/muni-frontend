@@ -38,6 +38,20 @@
       <div class="session-info">
         Sesion activa: <strong>{{ loggedUsername }}</strong> · {{ loggedRole }}
       </div>
+      <div
+        class="feedback-banner"
+        *ngIf="feedbackMessage"
+        [class.error]="feedbackType === 'error'"
+        [class.success]="feedbackType === 'success'"
+      >
+        <div>
+          <strong>{{ feedbackType === 'success' ? 'Cambio aplicado' : 'No se pudo aplicar el cambio' }}</strong>
+          <span>{{ feedbackMessage }}</span>
+        </div>
+        <button class="feedback-close" (click)="clearFeedback()" aria-label="Cerrar mensaje">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
     </header>
 
     <section class="panel" *ngIf="section === 'municipio'">
